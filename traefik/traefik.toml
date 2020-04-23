@@ -1,0 +1,30 @@
+
+[global]
+  logLevel = "INFO"
+  checkNewVersion = false
+  sendAnonymousUsage = true
+
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+
+  [entryPoints.https]
+    address = ":443"
+
+[file]
+filename="rules.toml"
+watch = true
+
+[log]
+  [traefikLog]
+    filePath = "/path/to/traefik.log"
+    format = "json"
+  [accessLog]
+    filePath = "/path/to/access.log"
+    format = "json"
+
+[api]
+
+[ping]
+
+[providers.docker]

@@ -1,0 +1,14 @@
+version: "3"
+services:
+    node:
+        image: node_img:latest
+        restart: always
+        volumes:
+            - "/Users/zhaoguanxin/CODE/traefik/node:/app"
+        #labels:
+        #    - "traefik.backend=node"
+        #    - "traefik.http.routers.node.rule=Host(`node.docker.localhost`)"
+networks:
+    default:
+        external:
+            name: traefik_webgateway
