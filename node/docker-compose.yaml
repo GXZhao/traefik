@@ -1,14 +1,14 @@
 version: "3"
 services:
     node:
-        image: tfnode:latest
+        image: tranode:latest
         restart: always
         volumes:
             - "/Users/zhaoguanxin/CODE/OTHER/traefik/node:/app"
         labels:
-           - "traefik.http.routers.node.rule=Host(`node.docker.localhost`)"
+            - "traefik.http.routers.node.rule=Host(`node.docker`)"
            
 networks:
     default:
         external:
-            name: traefik_default
+            name: traefik

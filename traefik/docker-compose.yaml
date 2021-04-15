@@ -4,11 +4,17 @@ services:
     container_name: traefik
     image: traefik:v2.2
     restart: always
-    command: --api.insecure=true --providers.docker --configFile /etc/traefik.toml 
+    command: --configFile /etc/traefik.toml --api.insecure=true --providers.docker
     ports:
       - "80:80"
       - "8080:8080"
+    networks: 
+      - traefik
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik.toml:/etc/traefik.toml:ro
       - ./config/:/etc/traefik/config/:ro
+
+networks:
+  traefik:
+    external: true
