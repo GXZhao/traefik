@@ -1,5 +1,4 @@
-FROM node:12.16.2
-MAINTAINER Ted
+FROM node:12.16.3-stretch-slim
 ENV TZ Asia/Shanghai
-EXPOSE 3690
+EXPOSE 3000
 CMD [ "node", "/app/app.js" ]

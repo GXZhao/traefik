@@ -4,7 +4,7 @@
 
 >*无须重启* 即可更新配置  
  *自动的服务发现与负载均衡*  
- 与 docker 的完美集成，基于 container label 的配置 
+ 与 docker 等编排工具完美集成，基于 container label 的配置 
  漂亮的 dashboard 界面  
 
 ## 核心概念
@@ -45,51 +45,45 @@ networks:
         driver: bridge
 ```
 
-执行命令: docker-compose up -d 开启 traefik 服务
-
 ___
 
-接下来启动一个node web服务，docker-compose.yaml 配置文件如下
+接下来启动两个node web服务，docker-compose.yaml 配置文件如下
 
 ```
 version: "3"
 services:
     node:
-        image: node_img:latest
+        image: tfnode:latest
         restart: always
         volumes:
-            - "/Users/zhaoguanxin/CODE/traefik/node:/app"
-            - "traefik.http.routers.node.rule=Host(`node.node`)"
+            - "/Users/zhaoguanxin/CODE/OTHER/traefik/node:/app"
+        labels:
+           - "traefik.http.routers.node.rule=Host(`node.docker.localhost`)"
+           
 networks:
     default:
         external:
-            name: traefik_webgateway
-
+            name: traefik_default
 ```
 
-此时我们可以通过主机名 node.node 来访问 node 服务，我们使用 curl 做测试
-
 ```
-➜  traefik curl --location --request GET '127.0.0.1/a' --header 'Host: node-node'
-A
+version: "3"
+services:
+    nodedev:
+        image: tfnodedev:latest
+        restart: always
+        volumes:
+            - "/Users/zhaoguanxin/CODE/OTHER/traefik/nodedev:/app"
+        labels:
+           - "traefik.http.routers.nodedev.rule=Host(`nodedev.docker.localhost`)"
+           
+networks:
+    default:
+        external:
+            name: traefik_default
 ```
 
-___
 使用 docker-compose up --scale node=4 对容器横向扩容
-
-
-当重复执行 traefik curl --location --request GET '127.0.0.1/a' --header 'Host: node-node' 时，
-```
-node_4  | AAAAAAAA
-node_3  | AAAAAAAA
-node_1  | AAAAAAAA
-node_2  | AAAAAAAA
-node_4  | AAAAAAAA
-node_3  | AAAAAAAA
-
-```
-可以看到，四个容器依次进行响应
-___
 
 
 >基本配置文件可以通过 [traefik.sample.toml](https://raw.githubusercontent.com/containous/traefik/master/traefik.sample.toml) 获取

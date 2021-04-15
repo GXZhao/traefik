@@ -1,35 +1,35 @@
 [global]
-  logLevel = "INFO"
-  checkNewVersion = false # 定期版本检查 默认 true
-  sendAnonymousUsage = true
+  checkNewVersion = false
+  sendAnonymousUsage = false
+
+[log]
+  level = "WARN"
+  format = "common"
+
+[api]
+  dashboard = true
+  insecure = true
+
+[ping]
+
+[accessLog]
+
+[providers]
+  [providers.docker]
+    watch = true
+    exposedByDefault = false
+    endpoint = "unix:///var/run/docker.sock"
+    swarmMode = false
+    useBindPortIP = false
+    network = "traefik_default"
+  [providers.file]
+    watch = true
+    directory = "/etc/traefik/config"
+    #filename = "rules.toml"
+    debugLogGeneratedTemplate = true
 
 [entryPoints]
   [entryPoints.http]
     address = ":80"
-
   [entryPoints.https]
     address = ":443"
-
-  [entryPoints.see]
-    address = ":8080"
-
-[file]
-filename="rules.toml"
-watch = true
-
-[log]
-  [traefikLog]
-    filePath = "log/traefik.log"
-    format = "json"
-  [accessLog]
-    filePath = "log/access.log"
-    format = "json"
-
-[api]
-  entryPoint = "see"
-  dashboard = true
-  defaultEntryPoints = ["http"]
-
-[ping]
-
-[providers.docker]

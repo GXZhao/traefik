@@ -1,4 +1,4 @@
-FROM node:12.16.2
+FROM node:12.16.3-stretch-slim
 ENV TZ Asia/Shanghai
-EXPOSE 3691
+EXPOSE 2000
 CMD [ "node", "/app/app.js" ]

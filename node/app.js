@@ -6,26 +6,26 @@ const app = new koa();
 
 app.use(function* (next) {
     if (this.request.url === '/') {
-        console.log('NONONONO')
-        this.body = 'NO'
+        console.log('node 111111111')
+        this.body = 'node'
         return;
     } else if (this.request.url === '/a') {
-        console.log('AAAAAAAA')
-        this.body = 'A'
+        console.log('node AAAAAAAAA')
+        this.body = 'node A'
         return;
     } else if (this.request.url === '/b') {
-        console.log('BBBBBBBB')
-        this.body = 'B'
+        console.log('node BBBBBBBB')
+        this.body = 'node B'
         return;
     } else if (this.request.url === '/c') {
-        console.log('CCCCCCCC')
-        this.body = 'C'
+        console.log('node CCCCCCCC')
+        this.body = 'node C'
         return;
     }
     yield next;
 })
 
-app.listen(process.env.PORT || 3690, '0.0.0.0');
-console.log('listening on port 3690');
+app.listen(3000, '0.0.0.0');
+console.log('listening on port 3000');
 
 module.exports = app;
