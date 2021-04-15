@@ -1,0 +1,26 @@
+[http]
+  [http.routers]
+    [http.routers.my-router]
+      rule = "Host(`node.docker.localhost`)"
+      service = "my-service"
+    [http.routers.my-router2]
+      rule = "Host(`nodedev.docker.localhost`)"
+      service = "my-service2"
+    [http.routers.my-router3]
+      rule = "Host(`node.docker.localhost`) && Path(`/a`)"
+      service = "my-service3"
+  
+  [http.services]
+      [http.services.my-service.loadBalancer]
+        [[http.services.my-service.loadBalancer.servers]]
+          url = "http://172.18.0.6:2000"
+  
+      [http.services.my-service2.loadBalancer]
+        [[http.services.my-service2.loadBalancer.servers]]
+          url = "http://172.18.0.3:3000"
+  
+      [http.services.my-service3.loadBalancer]
+        [[http.services.my-service3.loadBalancer.servers]]
+          url = "http://172.18.0.5:2000"
+        [[http.services.my-service3.loadBalancer.servers]]
+          url = "http://172.18.0.2:3000"
