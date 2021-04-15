@@ -1,7 +1,6 @@
-
 [global]
   logLevel = "INFO"
-  checkNewVersion = false
+  checkNewVersion = false # 定期版本检查 默认 true
   sendAnonymousUsage = true
 
 [entryPoints]
@@ -11,19 +10,25 @@
   [entryPoints.https]
     address = ":443"
 
+  [entryPoints.see]
+    address = ":8080"
+
 [file]
 filename="rules.toml"
 watch = true
 
 [log]
   [traefikLog]
-    filePath = "/path/to/traefik.log"
+    filePath = "log/traefik.log"
     format = "json"
   [accessLog]
-    filePath = "/path/to/access.log"
+    filePath = "log/access.log"
     format = "json"
 
 [api]
+  entryPoint = "see"
+  dashboard = true
+  defaultEntryPoints = ["http"]
 
 [ping]
 
