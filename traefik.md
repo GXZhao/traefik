@@ -1,13 +1,14 @@
 # traefik
 
-## 1.为何使用 traefik
+## 1.为何使用 traefik （nginx对比）
 
 >*无须重启* 即可更新配置  
  *自动的服务发现与负载均衡*  
  与 docker 等编排工具完美集成，基于 container label 的配置 
- 漂亮的 dashboard 界面  
+ 漂亮的 dashboard 界面
 
-## 核心概念
+
+## 2.核心概念
 >Traefik 类似边缘路由器，可以作为整个平台的入口，根据逻辑和规则，处理并路由每个传入的请求。这些规则确定哪些服务处理哪些请求；传统的反向代理需要一个配置文件，其中包含路由到你服务的所有可能路由，而Traefik 会实时检测服务并自动更新路由规则，可以自动服务发现。
 
 >Entrypoint 这是流量的入口，它们定义了接收请求的端口（HTTP或者TCP）。
@@ -19,6 +20,7 @@
 >Services 将请求转发给你的应用，负责配置如何获取最终将处理传入请求的实际服务。
 
 >Middlewares 中间件，用来修改请求或者根据请求来做出一些判断（authentication, rate limiting, headers, ...），中间件被附件到路由上，是一种在请求发送到你的服务之前（或者在服务的响应发送到客户端之前）调整请求的一种方法。
+
 
 ## 3.快速开始
 
@@ -47,7 +49,7 @@ networks:
     external: true
 ```
 
-___
+
 
 接下来启动两个node web服务，docker-compose.yaml 配置文件如下
 
@@ -84,12 +86,15 @@ networks:
         external:
             name: traefik
 ```
-## 自定义配置文件
+___
+
+## 4.自定义配置文件
 Traefik 在启动的时候，会在一下位置中搜索名为 traefik.toml（或 traefik.yml、traefik.yaml）的文件：
 * /etc/traefik/
 * [$XDG_CONFIG_HOME/](https://blog.csdn.net/u014025444/article/details/94029895)
 * $HOME/.config/
 * . (工作目录)
+
 
 traefik.toml
 ```
@@ -158,14 +163,15 @@ rules.toml
         [[http.services.my-service3.loadBalancer.servers]]
           url = "http://172.20.0.3:3000"
 ```
-
-使用 docker-compose up --scale node=4 对容器横向扩容
-
-
->基本配置文件可以通过 [traefik.sample.toml](https://raw.githubusercontent.com/containous/traefik/master/traefik.sample.toml) 获取
+___
 
 
->[DEMO在这获取](https://github.com/GXZhao/traefik)
+## 5.测试
+
+>负载均衡和路由
+
+
+>[DEMO在这里](https://github.com/GXZhao/traefik)
 
 
 
