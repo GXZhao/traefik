@@ -4,7 +4,7 @@ services:
     container_name: traefik
     image: traefik:v2.2
     restart: always
-    command: --configFile /etc/traefik.toml --api.insecure=true --providers.docker
+    command: --configFile /etc/traefik.toml
     ports:
       - "80:80"
       - "8080:8080"
