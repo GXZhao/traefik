@@ -165,11 +165,18 @@ rules.toml
 ```
 ___
 
-## 5.测试
+## 5.测试 
 
-负载均衡和路由
+负载均衡/路由/中间件
 ```
+    [http.routers.my-router4]
+      rule = "Host(`nodedev.docker`) && Path(`/a`)"
+      middlewares = ["my-mid"]
+      service = "my-service"
 
+  [http.middlewares]
+    [http.middlewares.my-mid.replacePath]
+      path = "/c"
 
 
 

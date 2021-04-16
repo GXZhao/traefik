@@ -9,14 +9,6 @@
 #    [http.routers.my-router3]
 #      rule = "Host(`node.docker`) && Path(`/a`)"
 #      service = "my-service3"
-#    [http.routers.my-router4]
-#      rule = "Host(`nodedev.docker`) && Path(`/a`)"
-#      middlewares = ["my-mid"]
-#      service = "my-service"
-#
-#  [http.middlewares]
-#    [http.middlewares.my-mid.replacePath]
-#      path = "/c"
 #
 #  [http.services]
 #      [http.services.my-service.loadBalancer]
