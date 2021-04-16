@@ -18,6 +18,7 @@ app.use(function* (next) {
         this.body = 'node B'
         return;
     } else if (this.request.url === '/c') {
+        console.log(this.request.req.headers['x-replaced-path'])
         console.log('node CCCCCCCC')
         this.body = 'node C'
         return;

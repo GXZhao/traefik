@@ -1,4 +1,4 @@
-# traefik 简易入门
+# traefik
 
 ## 1.为何使用 traefik
 
@@ -25,24 +25,26 @@
 使用 traefik:v2.2 作为镜像启动服务。docker-compose.yaml 配置如下
 
 ```
-version: "3"
-
+version: '3'
 services:
-    reverse-proxy:
-        image: traefik:v2.2
-        command: --api.insecure=true --providers.docker
-        networks:
-            - webgateway
-        ports:
-            - "80:80"
-            - "8080:8080"
-        volumes:
-            - /Users/zhaoguanxin/CODE/traefik/traefik/traefik.toml:/etc/traefik.toml // 挂载本地配置文件
-            - /var/run/docker.sock:/var/run/docker.sock
+  traefik:
+    container_name: traefik
+    image: traefik:v2.2
+    restart: always
+    command: --configFile /etc/traefik.toml --api.insecure=true --providers.docker
+    ports:
+      - "80:80"
+      - "8080:8080"
+    networks: 
+      - traefik
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.toml:/etc/traefik.toml:ro
+      - ./config/:/etc/traefik/config/:ro
 
 networks:
-    webgateway:
-        driver: bridge
+  traefik:
+    external: true
 ```
 
 ___
@@ -58,12 +60,12 @@ services:
         volumes:
             - "/Users/zhaoguanxin/CODE/OTHER/traefik/node:/app"
         labels:
-           - "traefik.http.routers.node.rule=Host(`node.docker.localhost`)"
+            - "traefik.http.routers.node.rule=Host(`node.docker`)"
            
 networks:
     default:
         external:
-            name: traefik_default
+            name: traefik
 ```
 
 ```
@@ -75,12 +77,86 @@ services:
         volumes:
             - "/Users/zhaoguanxin/CODE/OTHER/traefik/nodedev:/app"
         labels:
-           - "traefik.http.routers.nodedev.rule=Host(`nodedev.docker.localhost`)"
+            - "traefik.http.routers.nodedev.rule=Host(`nodedev.docker`)"
            
 networks:
     default:
         external:
-            name: traefik_default
+            name: traefik
+```
+## 自定义配置文件
+Traefik 在启动的时候，会在一下位置中搜索名为 traefik.toml（或 traefik.yml、traefik.yaml）的文件：
+* /etc/traefik/
+* [$XDG_CONFIG_HOME/](https://blog.csdn.net/u014025444/article/details/94029895)
+* $HOME/.config/
+* . (工作目录)
+
+traefik.toml
+```
+[global]
+  checkNewVersion = false
+  sendAnonymousUsage = false
+
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+
+  [entryPoints.https]
+    address = ":443"
+
+[log]
+
+[api]
+  insecure = true
+  dashboard = true
+
+[ping]
+
+[providers]
+  [providers.docker]
+  [providers.file]
+    directory = "/etc/traefik/config"
+    watch = true
+```
+
+rules.toml
+```
+[http]
+  [http.routers]
+    [http.routers.my-router]
+      rule = "Host(`node.docker`)"
+      service = "my-service"
+    [http.routers.my-router2]
+      rule = "Host(`nodedev.docker`)"
+      service = "my-service2"
+    [http.routers.my-router3]
+      rule = "Host(`node.docker`) && Path(`/a`)"
+      service = "my-service3"
+    [http.routers.my-router4]
+      rule = "Host(`nodedev.docker`) && Path(`/a`)"
+      middlewares = ["my-mid"]
+      service = "my-service"
+
+  [http.middlewares]
+    [http.middlewares.my-mid.replacePath]
+      path = "/c"
+
+  [http.services]
+      [http.services.my-service.loadBalancer]
+        [[http.services.my-service.loadBalancer.servers]]
+          url = "http://172.20.0.3:2000"
+          #url = "http://172.20.0.6:3000"
+  
+      [http.services.my-service2.loadBalancer]
+        [[http.services.my-service2.loadBalancer.servers]]
+          url = "http://172.20.0.6:3000"
+          #url = "http://172.20.0.5:2000"
+  
+      [http.services.my-service3.loadBalancer]
+        [[http.services.my-service3.loadBalancer.servers]]
+          url = "http://172.20.0.4:2000"
+        [[http.services.my-service3.loadBalancer.servers]]
+          url = "http://172.20.0.3:3000"
 ```
 
 使用 docker-compose up --scale node=4 对容器横向扩容

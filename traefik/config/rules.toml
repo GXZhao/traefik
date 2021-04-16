@@ -1,28 +1,36 @@
-[http]
-  [http.routers]
-    [http.routers.my-router]
-      rule = "Host(`node.docker`)"
-      service = "my-service"
-    [http.routers.my-router2]
-      rule = "Host(`nodedev.docker`)"
-      service = "my-service2"
-    [http.routers.my-router3]
-      rule = "Host(`node.docker`) && Path(`/a`)"
-      service = "my-service3"
-  
-  [http.services]
-      [http.services.my-service.loadBalancer]
-        [[http.services.my-service.loadBalancer.servers]]
-          url = "http://172.20.0.5:2000"
-          #url = "http://172.20.0.4:3000"
-  
-      [http.services.my-service2.loadBalancer]
-        [[http.services.my-service2.loadBalancer.servers]]
-          url = "http://172.20.0.4:3000"
-          #url = "http://172.20.0.5:2000"
-  
-      [http.services.my-service3.loadBalancer]
-        [[http.services.my-service3.loadBalancer.servers]]
-          url = "http://172.20.0.6:2000"
-        [[http.services.my-service3.loadBalancer.servers]]
-          url = "http://172.20.0.2:3000"
+#[http]
+#  [http.routers]
+#    [http.routers.my-router]
+#      rule = "Host(`node.docker`)"
+#      service = "my-service"
+#    [http.routers.my-router2]
+#      rule = "Host(`nodedev.docker`)"
+#      service = "my-service2"
+#    [http.routers.my-router3]
+#      rule = "Host(`node.docker`) && Path(`/a`)"
+#      service = "my-service3"
+#    [http.routers.my-router4]
+#      rule = "Host(`nodedev.docker`) && Path(`/a`)"
+#      middlewares = ["my-mid"]
+#      service = "my-service"
+#
+#  [http.middlewares]
+#    [http.middlewares.my-mid.replacePath]
+#      path = "/c"
+#
+#  [http.services]
+#      [http.services.my-service.loadBalancer]
+#        [[http.services.my-service.loadBalancer.servers]]
+#          url = "http://172.20.0.3:2000"
+#          #url = "http://172.20.0.6:3000"
+#  
+#      [http.services.my-service2.loadBalancer]
+#        [[http.services.my-service2.loadBalancer.servers]]
+#          url = "http://172.20.0.6:3000"
+#          #url = "http://172.20.0.5:2000"
+#  
+#      [http.services.my-service3.loadBalancer]
+#        [[http.services.my-service3.loadBalancer.servers]]
+#          url = "http://172.20.0.4:2000"
+#        [[http.services.my-service3.loadBalancer.servers]]
+#          url = "http://172.20.0.3:3000"
