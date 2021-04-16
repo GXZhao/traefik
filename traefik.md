@@ -165,13 +165,25 @@ rules.toml
 ```
 ___
 
-
 ## 5.测试
 
->负载均衡和路由
+负载均衡和路由
+```
 
 
->[DEMO在这里](https://github.com/GXZhao/traefik)
+
+
+
+```
+___
+## 资源
+
+>[DEMO](https://github.com/GXZhao/traefik)
+
+>[traefik文档](https://doc.traefik.io/traefik)
+
+
+
 
 
 
